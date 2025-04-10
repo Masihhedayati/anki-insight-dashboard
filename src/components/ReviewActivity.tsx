@@ -14,6 +14,9 @@ import {
   Bar,
   ReferenceLine
 } from "recharts";
+import { useChartSettings } from "@/context/ChartContext";
+import ChartGradient from "./ChartGradient";
+import CustomTooltip from "./CustomTooltip";
 
 const ReviewActivity = () => {
   // Calculate some statistics
@@ -36,6 +39,23 @@ const ReviewActivity = () => {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', { weekday: 'short' });
   };
+  
+  // Get chart settings from context
+  const { 
+    chartTheme, 
+    gridLines, 
+    animationsEnabled, 
+    smoothCurves,
+    useGradients 
+  } = useChartSettings();
+  
+  // Determine colors based on theme
+  const areaColor = chartTheme === 'dark' ? '#a78bfa' : '#8884d8';
+  const areaGradientStart = chartTheme === 'dark' ? '#a78bfa' : '#8884d8';
+  const areaGradientEnd = chartTheme === 'dark' ? '#7c3aed' : '#6c63ff';
+  const barColor = chartTheme === 'dark' ? '#818cf8' : '#6366f1';
+  const gridColor = chartTheme === 'dark' ? '#374151' : '#eee';
+  const referenceLineColor = chartTheme === 'dark' ? '#fb923c' : '#ff7300';
 
   return (
     <Card className="col-span-full">
@@ -73,32 +93,55 @@ const ReviewActivity = () => {
                 }}
               >
                 <defs>
-                  <linearGradient id="colorReviews" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0.1}/>
-                  </linearGradient>
+                  {useGradients && (
+                    <ChartGradient 
+                      id="colorReviews" 
+                      startColor={areaGradientStart} 
+                      endColor={areaGradientEnd} 
+                      startOpacity={0.8} 
+                      endOpacity={0.1} 
+                    />
+                  )}
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
+                {gridLines && (
+                  <CartesianGrid 
+                    strokeDasharray="3 3" 
+                    vertical={false} 
+                    stroke={gridColor} 
+                  />
+                )}
                 <XAxis 
                   dataKey="date" 
                   tickFormatter={(value) => new Date(value).getDate().toString()}
                   tick={{ fontSize: 12 }}
                   tickCount={6}
+                  stroke={chartTheme === 'dark' ? '#9ca3af' : undefined}
                 />
-                <YAxis tick={{ fontSize: 12 }} width={40} />
+                <YAxis 
+                  tick={{ fontSize: 12 }} 
+                  width={40} 
+                  stroke={chartTheme === 'dark' ? '#9ca3af' : undefined}
+                />
                 <Tooltip 
-                  formatter={(value) => [`${value} cards`, 'Reviews']} 
-                  labelFormatter={(value) => new Date(value).toLocaleDateString('en-US', { 
-                    month: 'short', 
-                    day: 'numeric' 
-                  })}
+                  content={
+                    <CustomTooltip 
+                      theme={chartTheme}
+                      valueFormatter={(value) => `${value} cards`}
+                      labelFormatter={(value) => new Date(value).toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric' 
+                      })}
+                    />
+                  } 
                 />
                 <Area 
-                  type="monotone" 
+                  type={smoothCurves ? "monotone" : "linear"} 
                   dataKey="count" 
-                  stroke="#8884d8" 
+                  stroke={areaColor} 
+                  strokeWidth={2}
                   fillOpacity={1} 
-                  fill="url(#colorReviews)" 
+                  fill={useGradients ? "url(#colorReviews)" : areaColor} 
+                  isAnimationActive={animationsEnabled}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -116,23 +159,54 @@ const ReviewActivity = () => {
                   bottom: 0,
                 }}
               >
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
+                {gridLines && (
+                  <CartesianGrid 
+                    strokeDasharray="3 3" 
+                    vertical={false} 
+                    stroke={gridColor} 
+                  />
+                )}
                 <XAxis 
                   dataKey="date" 
                   tickFormatter={formatXAxis}
                   tick={{ fontSize: 12 }}
+                  stroke={chartTheme === 'dark' ? '#9ca3af' : undefined}
                 />
-                <YAxis tick={{ fontSize: 12 }} width={40} />
+                <YAxis 
+                  tick={{ fontSize: 12 }} 
+                  width={40} 
+                  stroke={chartTheme === 'dark' ? '#9ca3af' : undefined}
+                />
                 <Tooltip 
-                  formatter={(value) => [`${value} cards`, 'Reviews']} 
-                  labelFormatter={(value) => new Date(value).toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    month: 'short', 
-                    day: 'numeric' 
-                  })}
+                  content={
+                    <CustomTooltip 
+                      theme={chartTheme}
+                      valueFormatter={(value) => `${value} cards`}
+                      labelFormatter={(value) => new Date(value).toLocaleDateString('en-US', { 
+                        weekday: 'long', 
+                        month: 'short', 
+                        day: 'numeric' 
+                      })}
+                    />
+                  } 
                 />
-                <ReferenceLine y={averageWeekly} stroke="#ff7300" strokeDasharray="3 3" />
-                <Bar dataKey="count" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                <ReferenceLine 
+                  y={averageWeekly} 
+                  stroke={referenceLineColor} 
+                  strokeDasharray="3 3" 
+                  label={{ 
+                    value: `Avg: ${averageWeekly}`, 
+                    position: 'right', 
+                    fill: referenceLineColor,
+                    fontSize: 12 
+                  }} 
+                />
+                <Bar 
+                  dataKey="count" 
+                  fill={barColor} 
+                  radius={[4, 4, 0, 0]} 
+                  isAnimationActive={animationsEnabled}
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>

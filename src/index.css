@@ -43,6 +43,21 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Chart Colors - Light Theme */
+    --chart-primary: #6366f1;
+    --chart-secondary: #8b5cf6;
+    --chart-success: #10b981;
+    --chart-warning: #f59e0b;
+    --chart-danger: #ef4444;
+    --chart-info: #0ea5e9;
+    --chart-mature: #10b981;
+    --chart-young: #8b5cf6;
+    --chart-learning: #f59e0b;
+    --chart-forgotten: #ef4444;
+    --chart-grid: #e5e7eb;
+    --chart-text: #4b5563;
+    --chart-axis: #9ca3af;
   }
 
   .dark {
@@ -82,6 +97,21 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Chart Colors - Dark Theme */
+    --chart-primary: #818cf8;
+    --chart-secondary: #a78bfa;
+    --chart-success: #34d399;
+    --chart-warning: #fbbf24;
+    --chart-danger: #f87171;
+    --chart-info: #38bdf8;
+    --chart-mature: #34d399;
+    --chart-young: #a78bfa;
+    --chart-learning: #fbbf24;
+    --chart-forgotten: #f87171;
+    --chart-grid: #374151;
+    --chart-text: #e5e7eb;
+    --chart-axis: #9ca3af;
   }
 }
 
@@ -112,17 +142,52 @@
 }
 
 .stat-card {
-  @apply rounded-lg shadow-sm bg-white p-4 hover:shadow-md transition-shadow;
+  @apply rounded-lg shadow-sm bg-card p-4 hover:shadow-md transition-shadow;
 }
 
 .stat-value {
-  @apply text-3xl font-bold text-gray-800;
+  @apply text-3xl font-bold text-foreground;
 }
 
 .stat-label {
-  @apply text-sm text-gray-500;
+  @apply text-sm text-muted-foreground;
 }
 
 .chart-container {
   @apply w-full h-[300px] max-h-[300px] overflow-hidden;
+}
+
+/* Chart dark mode overrides */
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: var(--chart-grid);
+}
+
+.dark .recharts-text {
+  fill: var(--chart-text);
+}
+
+.dark .recharts-default-tooltip {
+  background-color: var(--background) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.recharts-reference-line line {
+  stroke-dasharray: 3 3;
+}
+
+/* Enhanced chart animations */
+.recharts-bar-rectangle, 
+.recharts-area-dot {
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.recharts-bar-rectangle:hover {
+  opacity: 0.8;
+  transform: translateY(-2px);
+}
+
+.recharts-tooltip-cursor {
+  stroke-dasharray: 5 5;
 }

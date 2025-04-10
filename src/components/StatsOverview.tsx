@@ -4,9 +4,12 @@ import { Progress } from "@/components/ui/progress";
 import { cardStatesData, responseTimeData } from "../data/mockData";
 import { formatNumber } from "../utils/chartUtils";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import { useChartSettings } from "@/context/ChartContext";
+import CustomTooltip from "./CustomTooltip";
 
 const StatsOverview = () => {
   const totalCards = cardStatesData.reduce((sum, item) => sum + item.value, 0);
+  const { chartTheme } = useChartSettings();
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
@@ -37,8 +40,11 @@ const StatsOverview = () => {
                 ))}
               </Pie>
               <Tooltip 
-                formatter={(value) => [`${value} cards`, 'Count']}
-                labelFormatter={() => ''}
+                content={<CustomTooltip 
+                  theme={chartTheme}
+                  labelFormatter={() => 'Card Distribution'} 
+                  valueFormatter={(value, name) => `${value} cards (${((value / totalCards) * 100).toFixed(1)}%)`}
+                />} 
               />
               <Legend />
             </PieChart>
@@ -66,8 +72,10 @@ const StatsOverview = () => {
                 <Progress 
                   value={(item.value / totalCards) * 100} 
                   className="h-2"
-                  style={{ backgroundColor: 'rgba(0,0,0,0.1)' }}
-                  indicatorColor={item.color}
+                  style={{ 
+                    backgroundColor: 'rgba(0,0,0,0.1)',
+                    '--progress-background': item.color // custom CSS variable
+                  } as React.CSSProperties}
                 />
               </div>
             ))}
