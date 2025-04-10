@@ -1,0 +1,173 @@
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { retentionData } from "../data/mockData";
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  ReferenceLine
+} from "recharts";
+import { Info } from "lucide-react";
+import { Tooltip as UITooltip } from "@/components/ui/tooltip";
+import { TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+
+const RetentionMetrics = () => {
+  // Calculate average retention rate
+  const averageRetention = Math.round(
+    retentionData.reduce((sum, item) => sum + item.retention, 0) / retentionData.length
+  );
+
+  // Forgetting curve points (sample data)
+  const forgettingCurveData = [
+    { day: 0, retention: 100 },
+    { day: 1, retention: 70 },
+    { day: 2, retention: 60 },
+    { day: 5, retention: 46 },
+    { day: 10, retention: 37 },
+    { day: 15, retention: 32 },
+    { day: 30, retention: 28 },
+    { day: 60, retention: 24 },
+  ];
+
+  return (
+    <Card className="col-span-full">
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>Retention Metrics</CardTitle>
+            <CardDescription>
+              Tracking memory retention over time
+            </CardDescription>
+          </div>
+          <div className="rounded-md bg-primary/10 px-3 py-1 text-sm">
+            <span className="font-medium">{averageRetention}%</span> Average Retention
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="h-[350px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="h-[300px]">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium">Monthly Retention Rate</h3>
+              <TooltipProvider>
+                <UITooltip>
+                  <TooltipTrigger asChild>
+                    <div>
+                      <Info className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="w-[200px] text-xs">
+                      Percentage of cards successfully recalled during reviews each month.
+                      Higher is better.
+                    </p>
+                  </TooltipContent>
+                </UITooltip>
+              </TooltipProvider>
+            </div>
+            <ResponsiveContainer width="100%" height="90%">
+              <LineChart
+                data={retentionData}
+                margin={{
+                  top: 10,
+                  right: 10,
+                  left: 0,
+                  bottom: 0,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis 
+                  domain={[60, 100]} 
+                  tick={{ fontSize: 12 }} 
+                  width={40}
+                  tickFormatter={(value) => `${value}%`}
+                />
+                <Tooltip 
+                  formatter={(value) => [`${value}%`, 'Retention Rate']} 
+                />
+                <ReferenceLine y={averageRetention} stroke="#ff7300" strokeDasharray="3 3" />
+                <Line 
+                  type="monotone" 
+                  dataKey="retention" 
+                  stroke="#10b981" 
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  activeDot={{ r: 5 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="h-[300px]">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium">Forgetting Curve</h3>
+              <TooltipProvider>
+                <UITooltip>
+                  <TooltipTrigger asChild>
+                    <div>
+                      <Info className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="w-[200px] text-xs">
+                      Shows how information is forgotten over time without review.
+                      This highlights the importance of spaced repetition.
+                    </p>
+                  </TooltipContent>
+                </UITooltip>
+              </TooltipProvider>
+            </div>
+            <ResponsiveContainer width="100%" height="90%">
+              <LineChart
+                data={forgettingCurveData}
+                margin={{
+                  top: 10,
+                  right: 10,
+                  left: 0,
+                  bottom: 0,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis 
+                  dataKey="day" 
+                  tick={{ fontSize: 12 }}
+                  label={{ 
+                    value: 'Days Since Learning', 
+                    position: 'insideBottom', 
+                    offset: -10,
+                    fontSize: 12
+                  }}
+                />
+                <YAxis 
+                  domain={[0, 100]} 
+                  tick={{ fontSize: 12 }} 
+                  width={40}
+                  tickFormatter={(value) => `${value}%`}
+                />
+                <Tooltip 
+                  formatter={(value) => [`${value}%`, 'Retention']} 
+                  labelFormatter={(value) => `Day ${value}`}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="retention" 
+                  stroke="#ef4444" 
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  activeDot={{ r: 5 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default RetentionMetrics;

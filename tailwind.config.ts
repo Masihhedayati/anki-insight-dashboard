@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,20 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Anki chart colors
+				chart: {
+					primary: '#6366f1',
+					secondary: '#8b5cf6',
+					success: '#10b981',
+					warning: '#f59e0b',
+					danger: '#ef4444',
+					info: '#0ea5e9',
+					mature: '#10b981',
+					young: '#8b5cf6',
+					learning: '#f59e0b',
+					forgotten: '#ef4444'
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
