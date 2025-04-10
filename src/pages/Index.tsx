@@ -6,6 +6,7 @@ import CardPerformance from "@/components/CardPerformance";
 import RetentionMetrics from "@/components/RetentionMetrics";
 import FutureWorkload from "@/components/FutureWorkload";
 import StudyPatterns from "@/components/StudyPatterns";
+// Import new components if needed in the future
 
 const Index = () => {
   return (

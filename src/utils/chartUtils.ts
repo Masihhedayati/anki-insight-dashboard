@@ -1,4 +1,3 @@
-
 /**
  * Formats a number with a thousands separator
  */
@@ -52,26 +51,6 @@ export const getCardTypeColor = (type: string): string => {
 };
 
 /**
- * Custom tooltip formatter for charts
- */
-export const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white p-2 border rounded shadow-md">
-        <p className="font-medium">{label}</p>
-        {payload.map((entry: any, index: number) => (
-          <p key={index} style={{ color: entry.color }}>
-            {entry.name}: {entry.value}
-          </p>
-        ))}
-      </div>
-    );
-  }
-
-  return null;
-};
-
-/**
  * Calculate percentage change between two numbers
  */
 export const percentChange = (current: number, previous: number): string => {
@@ -83,20 +62,11 @@ export const percentChange = (current: number, previous: number): string => {
 };
 
 /**
- * Generate gradient for area charts
- */
-export const createChartGradient = (id: string, startColor: string, endColor: string) => {
-  return (
-    <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
-      <stop offset="5%" stopColor={startColor} stopOpacity={0.8} />
-      <stop offset="95%" stopColor={endColor} stopOpacity={0.1} />
-    </linearGradient>
-  );
-};
-
-/**
  * A reusable function to get the last N items from an array
  */
 export const getLastNItems = <T,>(array: T[], n: number): T[] => {
   return array.slice(-n);
 };
+
+// Remove JSX components from this utility file
+// These will be implemented in their own components
