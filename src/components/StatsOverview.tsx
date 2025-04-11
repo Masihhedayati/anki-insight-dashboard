@@ -23,7 +23,7 @@ const StatsOverview = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="h-[300px]">
-          <ChartAnimation delay={400}>
+          <ChartAnimation type="scaleIn" delay={300}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -36,18 +36,19 @@ const StatsOverview = () => {
                   dataKey="value"
                   nameKey="name"
                   label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                  labelLine={false}
+                  labelLine={{ stroke: "#ccc", strokeWidth: 1, opacity: 0.7 }}
                   isAnimationActive={animationsEnabled}
-                  animationDuration={1500}
-                  animationEasing="ease-out"
+                  animationDuration={1200}
                   animationBegin={100}
+                  animationEasing="ease-out"
+                  paddingAngle={2}
                 >
                   {cardStatesData.map((entry, index) => (
                     <Cell 
                       key={`cell-${index}`} 
-                      fill={entry.color} 
-                      className="animate-pulse" 
-                      style={{ animationDelay: `${index * 150}ms`, animationDuration: '3s' }} 
+                      fill={entry.color}
+                      strokeWidth={4}
+                      stroke={chartTheme === "dark" ? "rgba(0,0,0,0.2)" : "rgba(255,255,255,0.6)"}
                     />
                   ))}
                 </Pie>
@@ -58,7 +59,12 @@ const StatsOverview = () => {
                     valueFormatter={(value, name) => `${value} cards (${((value / totalCards) * 100).toFixed(1)}%)`}
                   />} 
                 />
-                <Legend />
+                <Legend 
+                  layout="horizontal" 
+                  verticalAlign="bottom" 
+                  align="center"
+                  formatter={(value, entry) => <span className="text-sm font-medium">{value}</span>}
+                />
               </PieChart>
             </ResponsiveContainer>
           </ChartAnimation>
@@ -74,22 +80,28 @@ const StatsOverview = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartAnimation delay={600} type="fadeIn">
+          <ChartAnimation delay={400} type="fadeIn">
             <div className="space-y-4">
               {cardStatesData.map((item, index) => (
-                <div key={index} className="space-y-2 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                <div key={index} className="space-y-2" style={{ animationDelay: `${index * 100}ms` }}>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">{item.name}</span>
+                    <div className="flex items-center gap-2">
+                      <div 
+                        className="w-3 h-3 rounded-full" 
+                        style={{ backgroundColor: item.color }}
+                      ></div>
+                      <span className="text-sm font-medium">{item.name}</span>
+                    </div>
                     <span className="text-sm text-muted-foreground">
                       {item.value} cards ({((item.value / totalCards) * 100).toFixed(1)}%)
                     </span>
                   </div>
                   <Progress 
                     value={(item.value / totalCards) * 100} 
-                    className="h-2 transition-all duration-1000"
+                    className="h-2 transition-all duration-500"
                     style={{ 
                       backgroundColor: 'rgba(0,0,0,0.1)',
-                      '--progress-background': item.color // custom CSS variable
+                      '--progress-background': item.color
                     } as React.CSSProperties}
                   />
                 </div>
@@ -102,7 +114,7 @@ const StatsOverview = () => {
                 {responseTimeData.map((item, index) => (
                   <div 
                     key={index} 
-                    className="flex items-center justify-between animate-fade-in" 
+                    className="flex items-center justify-between" 
                     style={{ animationDelay: `${(index + cardStatesData.length) * 100}ms` }}
                   >
                     <span className="text-sm">{item.category}</span>
