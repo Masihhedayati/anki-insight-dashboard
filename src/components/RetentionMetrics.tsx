@@ -92,7 +92,7 @@ const RetentionMetrics = () => {
                 </UITooltip>
               </TooltipProvider>
             </div>
-            <ChartAnimation delay={300}>
+            <ChartAnimation delay={300} type="dataReveal" importance="high">
               <ResponsiveContainer width="100%" height="90%">
                 <LineChart
                   data={retentionData}
@@ -152,7 +152,7 @@ const RetentionMetrics = () => {
                 </UITooltip>
               </TooltipProvider>
             </div>
-            <ChartAnimation delay={600}>
+            <ChartAnimation delay={600} type="dataReveal" dataDirection="bottom-to-top">
               <ResponsiveContainer width="100%" height="90%">
                 <LineChart
                   data={forgettingCurveData}
@@ -194,7 +194,7 @@ const RetentionMetrics = () => {
                     activeDot={{ r: 8, className: "animate-pulse" }}
                     isAnimationActive={animationsEnabled}
                     animationDuration={1500}
-                    animationEasing="cubic-bezier(0.25, 0.46, 0.45, 0.94)"
+                    animationEasing="ease-out"
                     animationBegin={400}
                   />
                 </LineChart>
