@@ -123,38 +123,78 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Responsive font scaling */
+  h1 {
+    @apply text-2xl sm:text-3xl lg:text-4xl;
+  }
+  
+  h2 {
+    @apply text-xl sm:text-2xl lg:text-3xl;
+  }
+  
+  h3 {
+    @apply text-lg sm:text-xl lg:text-2xl;
+  }
 }
 
 .recharts-tooltip-wrapper {
   outline: none !important;
 }
 
+/* Responsive grid classes */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
 }
 
 @media (min-width: 1024px) {
   .dashboard-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
   }
 }
 
 .stat-card {
-  @apply rounded-lg shadow-sm bg-card p-4 hover:shadow-md transition-shadow;
+  @apply rounded-lg shadow-sm bg-card p-3 sm:p-4 hover:shadow-md transition-shadow;
 }
 
 .stat-value {
-  @apply text-3xl font-bold text-foreground;
+  @apply text-xl sm:text-2xl lg:text-3xl font-bold text-foreground;
 }
 
 .stat-label {
-  @apply text-sm text-muted-foreground;
+  @apply text-xs sm:text-sm text-muted-foreground;
 }
 
 .chart-container {
-  @apply w-full h-[300px] max-h-[300px] overflow-hidden;
+  @apply w-full h-[200px] sm:h-[250px] lg:h-[300px] max-h-[300px] overflow-hidden;
+}
+
+/* Chart responsive adjustments */
+@media (max-width: 640px) {
+  .recharts-text {
+    font-size: 10px;
+  }
+  
+  .recharts-tooltip-wrapper .recharts-default-tooltip {
+    padding: 6px !important;
+  }
+  
+  .recharts-legend-item {
+    margin-right: 6px !important;
+  }
+  
+  .recharts-legend-item-text {
+    font-size: 10px !important;
+  }
 }
 
 /* Chart dark mode overrides */
@@ -190,4 +230,21 @@
 
 .recharts-tooltip-cursor {
   stroke-dasharray: 5 5;
+}
+
+/* Responsive padding adjustments */
+.card-content-responsive {
+  @apply p-3 sm:p-4 md:p-6;
+}
+
+.card-header-responsive {
+  @apply p-3 sm:p-4 md:p-6 pb-0;
+}
+
+/* Touch-friendly buttons for mobile */
+@media (max-width: 640px) {
+  button, 
+  .clickable {
+    @apply min-h-[36px] min-w-[36px];
+  }
 }
