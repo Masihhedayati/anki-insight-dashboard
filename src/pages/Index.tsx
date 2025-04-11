@@ -17,15 +17,16 @@ const Index = () => {
   return (
     <ChartProvider>
       <div className="container mx-auto py-4 sm:py-6 lg:py-8 px-3 sm:px-4 max-w-7xl">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0">
+        <div className="mb-4 sm:mb-6">
           <DashboardHeader />
-          <div className="flex items-center gap-2 self-end sm:self-auto">
-            <ChartSettings />
-            <ThemeSwitcher />
-          </div>
         </div>
         
-        <div className="space-y-4 sm:space-y-6 lg:space-y-8 mt-4 sm:mt-6 lg:mt-8">
+        <div className="flex justify-end items-center gap-2 mb-4 sm:mb-6">
+          <ChartSettings />
+          <ThemeSwitcher />
+        </div>
+        
+        <div className="space-y-4 sm:space-y-6 lg:space-y-8">
           <ReviewActivity />
           
           <StatsOverview />

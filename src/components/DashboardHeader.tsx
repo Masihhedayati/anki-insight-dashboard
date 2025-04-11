@@ -1,6 +1,7 @@
 
-import { Calendar, Activity, Award } from "lucide-react";
+import { Calendar, Activity, Award, Sparkles } from "lucide-react";
 import { streakData, dailySummary } from "../data/mockData";
+import { Badge } from "./ui/badge";
 
 const DashboardHeader = () => {
   return (
@@ -12,14 +13,28 @@ const DashboardHeader = () => {
             Visualize your learning progress and optimize your study habits
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2 mt-3 md:mt-0">
-          <div className="flex items-center bg-primary/10 text-primary px-2 sm:px-3 py-1 rounded-full">
-            <Award className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-            <span className="text-xs sm:text-sm font-medium">{streakData.current} day streak</span>
+        <div className="flex flex-wrap items-center gap-3 mt-3 md:mt-0 self-end md:self-auto ml-auto">
+          {/* Enhanced Streak Badge */}
+          <div className="relative group animate-fade-in">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 to-accent opacity-75 rounded-full blur-sm group-hover:opacity-100 transition-all duration-500 group-hover:blur-md"></div>
+            <div className="flex items-center bg-background/70 backdrop-blur-sm border border-primary/30 text-primary px-3 py-1.5 rounded-full relative">
+              <div className="absolute inset-0 bg-primary/10 rounded-full animate-pulse opacity-50"></div>
+              <Award className="h-4 w-4 sm:h-4 sm:w-4 mr-1.5 text-chart-primary animate-[pulse_2s_ease-in-out_infinite]" />
+              <span className="text-xs sm:text-sm font-medium flex items-center gap-1">
+                <span className="font-bold text-sm sm:text-base">{streakData.current}</span> day streak
+                <Sparkles className="h-3 w-3 text-chart-warning animate-[scale-in_1s_ease-out_infinite_alternate]" />
+              </span>
+            </div>
           </div>
-          <div className="bg-accent/20 text-accent-foreground px-2 sm:px-3 py-1 rounded-full flex items-center">
-            <Calendar className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-            <span className="text-xs sm:text-sm font-medium">Last reviewed: Today</span>
+
+          {/* Enhanced Last Reviewed Badge */}
+          <div className="relative group animate-fade-in" style={{ animationDelay: "200ms" }}>
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-accent/50 to-chart-info opacity-75 rounded-full blur-sm group-hover:opacity-100 transition-all duration-500 group-hover:blur-md"></div>
+            <div className="flex items-center bg-background/70 backdrop-blur-sm border border-accent/30 px-3 py-1.5 rounded-full relative">
+              <div className="absolute inset-0 bg-accent/10 rounded-full animate-pulse opacity-50"></div>
+              <Calendar className="h-4 w-4 sm:h-4 sm:w-4 mr-1.5 text-chart-secondary animate-[pulse_2.5s_ease-in-out_infinite]" />
+              <span className="text-xs sm:text-sm font-medium">Last reviewed: Today</span>
+            </div>
           </div>
         </div>
       </div>
