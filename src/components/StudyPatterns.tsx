@@ -15,9 +15,10 @@ import { formatTime } from "../utils/chartUtils";
 import { Clock } from "lucide-react";
 import ChartAnimation from "./ChartAnimation";
 import { useChartSettings } from "@/context/ChartContext";
+import CustomTooltip from "./CustomTooltip";
 
 const StudyPatterns = () => {
-  const { animationsEnabled } = useChartSettings();
+  const { animationsEnabled, chartTheme } = useChartSettings();
   
   // Calculate total study time
   const totalMinutes = studyTimeData.reduce((total, item) => total + item.minutes, 0);
@@ -88,9 +89,16 @@ const StudyPatterns = () => {
                   tickFormatter={(value) => `${value}m`}
                 />
                 <Tooltip 
-                  formatter={(value) => [`${value} minutes`, 'Study Time']} 
-                  labelFormatter={(hour) => `${format12Hour(hour)}`}
-                  animationDuration={300}
+                  content={<CustomTooltip 
+                    theme={chartTheme}
+                    valueFormatter={(value) => `${value} minutes`}
+                    labelFormatter={(hour) => `${format12Hour(hour)}`}
+                  />}
+                  cursor={{
+                    fill: chartTheme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                    radius: [4, 4, 0, 0]
+                  }}
+                  animationDuration={200}
                 />
                 <Bar 
                   dataKey="minutes" 
@@ -116,7 +124,8 @@ const StudyPatterns = () => {
                     return (
                       <Cell 
                         key={`cell-${index}`} 
-                        fill={color} 
+                        fill={color}
+                        className="transition-all duration-300 hover:filter hover:brightness-110"
                       />
                     );
                   })}

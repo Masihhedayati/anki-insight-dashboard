@@ -16,10 +16,11 @@ import { Compass } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ChartAnimation from "./ChartAnimation";
 import { useChartSettings } from "@/context/ChartContext";
+import CustomTooltip from "./CustomTooltip";
 
 const FutureWorkload = () => {
   const isMobile = useIsMobile();
-  const { animationsEnabled } = useChartSettings();
+  const { animationsEnabled, chartTheme } = useChartSettings();
   
   // Calculate average daily due cards
   const averageDue = Math.round(
@@ -84,11 +85,18 @@ const FutureWorkload = () => {
                   tickFormatter={value => isMobile && value > 999 ? `${(value/1000).toFixed(1)}k` : value}
                 />
                 <Tooltip 
-                  formatter={(value) => [`${value} cards`, 'Due']} 
-                  contentStyle={{ fontSize: isMobile ? '12px' : '14px' }}
-                  animationDuration={300}
+                  content={<CustomTooltip 
+                    theme={chartTheme}
+                    valueFormatter={(value) => `${value} cards`}
+                    labelFormatter={(value) => `${value}`}
+                  />}
+                  cursor={{
+                    fill: chartTheme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                    radius: [4, 4, 0, 0]
+                  }}
+                  animationDuration={200}
                 />
-                <ReferenceLine y={averageDue} stroke="#888" strokeDasharray="3 3" />
+                <ReferenceLine y={averageDue} stroke={chartTheme === 'dark' ? "#888" : "#666"} strokeDasharray="3 3" />
                 <Bar 
                   dataKey="count" 
                   fill="#6366f1" 
@@ -110,8 +118,8 @@ const FutureWorkload = () => {
                       <Cell 
                         key={`cell-${index}`} 
                         fill={color} 
-                        className="animate-glow-pulse hover:opacity-90 transition-opacity duration-300" 
-                        style={{ animationDelay: `${index * 150}ms`, animationDuration: '3s' }}
+                        className="transition-colors duration-300 hover:brightness-110" 
+                        style={{ animationDelay: `${index * 150}ms` }}
                       />
                     );
                   })}

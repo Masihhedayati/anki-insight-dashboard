@@ -16,9 +16,10 @@ import { Tooltip as UITooltip } from "@/components/ui/tooltip";
 import { TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ChartAnimation from "./ChartAnimation";
 import { useChartSettings } from "@/context/ChartContext";
+import CustomTooltip from "./CustomTooltip";
 
 const RetentionMetrics = () => {
-  const { animationsEnabled } = useChartSettings();
+  const { animationsEnabled, chartTheme } = useChartSettings();
 
   // Calculate average retention rate
   const averageRetention = Math.round(
@@ -36,6 +37,13 @@ const RetentionMetrics = () => {
     { day: 30, retention: 28 },
     { day: 60, retention: 24 },
   ];
+
+  const lineActiveDot = {
+    r: 6,
+    stroke: chartTheme === 'dark' ? '#fff' : '#000',
+    strokeWidth: 1,
+    fill: chartTheme === 'dark' ? '#10b981' : '#10b981'
+  };
 
   return (
     <Card className="col-span-full relative overflow-hidden">
@@ -94,21 +102,41 @@ const RetentionMetrics = () => {
                     tickFormatter={(value) => `${value}%`}
                   />
                   <Tooltip 
-                    formatter={(value) => [`${value}%`, 'Retention Rate']} 
-                    animationDuration={300}
+                    content={<CustomTooltip 
+                      theme={chartTheme}
+                      valueFormatter={(value) => `${value}%`}
+                      labelFormatter={(month) => `${month}`}
+                    />}
+                    cursor={{
+                      stroke: chartTheme === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)',
+                      strokeWidth: 1,
+                      strokeDasharray: '3 3'
+                    }}
+                    animationDuration={200}
                   />
-                  <ReferenceLine y={averageRetention} stroke="#ff7300" strokeDasharray="3 3" />
+                  <ReferenceLine 
+                    y={averageRetention} 
+                    stroke={chartTheme === 'dark' ? "#fb923c" : "#f97316"} 
+                    strokeDasharray="3 3"
+                    label={{ 
+                      value: `Avg: ${averageRetention}%`, 
+                      position: 'right',
+                      fill: chartTheme === 'dark' ? "#fb923c" : "#f97316",
+                      fontSize: 12
+                    }}
+                  />
                   <Line 
                     type="monotone" 
                     dataKey="retention" 
                     stroke="#10b981" 
                     strokeWidth={2}
-                    dot={{ r: 3 }}
-                    activeDot={{ r: 6 }}
+                    dot={{ r: 3, fill: "#10b981" }}
+                    activeDot={lineActiveDot}
                     isAnimationActive={animationsEnabled}
                     animationDuration={1500}
                     animationEasing="ease-out"
                     animationBegin={100}
+                    className="transition-opacity hover:opacity-90"
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -163,21 +191,35 @@ const RetentionMetrics = () => {
                     tickFormatter={(value) => `${value}%`}
                   />
                   <Tooltip 
-                    formatter={(value) => [`${value}%`, 'Retention']} 
-                    labelFormatter={(value) => `Day ${value}`}
-                    animationDuration={300}
+                    content={<CustomTooltip 
+                      theme={chartTheme}
+                      valueFormatter={(value) => `${value}%`}
+                      labelFormatter={(day) => `Day ${day}`}
+                    />}
+                    cursor={{
+                      stroke: chartTheme === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)',
+                      strokeWidth: 1,
+                      strokeDasharray: '3 3'
+                    }}
+                    animationDuration={200}
                   />
                   <Line 
                     type="monotone" 
                     dataKey="retention" 
                     stroke="#ef4444" 
                     strokeWidth={2}
-                    dot={{ r: 3 }}
-                    activeDot={{ r: 6 }}
+                    dot={{ r: 3, fill: "#ef4444" }}
+                    activeDot={{
+                      r: 6,
+                      stroke: chartTheme === 'dark' ? '#fff' : '#000',
+                      strokeWidth: 1,
+                      fill: "#ef4444"
+                    }}
                     isAnimationActive={animationsEnabled}
                     animationDuration={1500}
                     animationEasing="ease-out"
                     animationBegin={400}
+                    className="transition-opacity hover:opacity-90"
                   />
                 </LineChart>
               </ResponsiveContainer>

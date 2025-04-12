@@ -36,7 +36,7 @@ const StatsOverview = () => {
                   dataKey="value"
                   nameKey="name"
                   label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                  labelLine={{ stroke: "#ccc", strokeWidth: 1, opacity: 0.7 }}
+                  labelLine={{ stroke: chartTheme === "dark" ? "#666" : "#ccc", strokeWidth: 1, opacity: 0.7 }}
                   isAnimationActive={animationsEnabled}
                   animationDuration={1200}
                   animationBegin={100}
@@ -49,6 +49,7 @@ const StatsOverview = () => {
                       fill={entry.color}
                       strokeWidth={4}
                       stroke={chartTheme === "dark" ? "rgba(0,0,0,0.2)" : "rgba(255,255,255,0.6)"}
+                      className="transition-all duration-200 hover:opacity-90"
                     />
                   ))}
                 </Pie>
@@ -58,12 +59,15 @@ const StatsOverview = () => {
                     labelFormatter={() => 'Card Distribution'} 
                     valueFormatter={(value, name) => `${value} cards (${((value / totalCards) * 100).toFixed(1)}%)`}
                   />} 
+                  animationDuration={200}
+                  cursor={false}
                 />
                 <Legend 
                   layout="horizontal" 
                   verticalAlign="bottom" 
                   align="center"
                   formatter={(value, entry) => <span className="text-sm font-medium">{value}</span>}
+                  wrapperStyle={{ opacity: 0.9 }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -100,7 +104,7 @@ const StatsOverview = () => {
                     value={(item.value / totalCards) * 100} 
                     className="h-2 transition-all duration-500"
                     style={{ 
-                      backgroundColor: 'rgba(0,0,0,0.1)',
+                      backgroundColor: chartTheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
                       '--progress-background': item.color
                     } as React.CSSProperties}
                   />
@@ -114,7 +118,7 @@ const StatsOverview = () => {
                 {responseTimeData.map((item, index) => (
                   <div 
                     key={index} 
-                    className="flex items-center justify-between"
+                    className="flex items-center justify-between p-2 rounded-md hover:bg-muted/40 transition-colors"
                   >
                     <span className="text-sm">{item.category}</span>
                     <span className="text-sm font-medium">{item.time.toFixed(1)}s</span>
