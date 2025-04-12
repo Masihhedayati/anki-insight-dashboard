@@ -34,15 +34,15 @@ export const CustomTooltip: React.FC<CustomTooltipProps> = ({
   const formattedLabel = labelFormatter ? labelFormatter(label) : label;
 
   return (
-    <div className={`${bgColor} ${textColor} p-3 border ${borderColor} rounded shadow-md ${className}`}>
+    <div className={`${bgColor} ${textColor} p-3 border ${borderColor} rounded shadow-md backdrop-blur-sm transition-all duration-150 transform scale-100 hover:scale-102 ${className}`}>
       {showLabel && formattedLabel && (
-        <p className="font-medium mb-1">{formattedLabel}</p>
+        <p className="font-medium mb-1 border-b border-gray-200 dark:border-gray-700 pb-1">{formattedLabel}</p>
       )}
       <div className="space-y-1">
         {payload.map((entry: any, index: number) => (
           <div key={index} className="flex items-center gap-2">
             <div 
-              className="w-3 h-3 rounded-full" 
+              className="w-3 h-3 rounded-full transition-transform duration-200 hover:scale-125" 
               style={{ backgroundColor: entry.color }} 
             />
             <span className="font-medium">

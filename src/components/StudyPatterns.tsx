@@ -92,13 +92,12 @@ const StudyPatterns = () => {
                   content={<CustomTooltip 
                     theme={chartTheme}
                     valueFormatter={(value) => `${value} minutes`}
-                    labelFormatter={(hour) => `${format12Hour(hour)}`}
+                    labelFormatter={(hour) => `${format12Hour(Number(hour))}`}
                   />}
                   cursor={{
                     fill: chartTheme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
                     radius: [4, 4, 0, 0]
                   }}
-                  animationDuration={200}
                 />
                 <Bar 
                   dataKey="minutes" 

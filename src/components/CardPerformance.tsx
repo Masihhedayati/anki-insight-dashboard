@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import ChartAnimation from "./ChartAnimation";
 import { useChartSettings } from "@/context/ChartContext";
+import CustomTooltip from "./CustomTooltip";
 
 const CardPerformance = () => {
   const { animationsEnabled, chartTheme } = useChartSettings();
@@ -54,8 +55,15 @@ const CardPerformance = () => {
                 <XAxis dataKey="range" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} width={40} />
                 <Tooltip 
-                  formatter={(value) => [`${value} cards`, 'Count']} 
-                  animationDuration={300}
+                  content={<CustomTooltip 
+                    theme={chartTheme}
+                    valueFormatter={(value) => `${value} cards`} 
+                    labelFormatter={(label) => `Ease Factor: ${label}`}
+                  />} 
+                  cursor={{
+                    fill: chartTheme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                    radius: [4, 4, 0, 0]
+                  }}
                 />
                 <Bar 
                   dataKey="count" 
@@ -66,13 +74,31 @@ const CardPerformance = () => {
                   animationBegin={200}
                   animationEasing="ease-out"
                 >
-                  <LabelList dataKey="count" position="top" style={{ fontSize: '11px', fill: '#666' }} />
-                  {easeFactorData.map((entry, index) => (
-                    <Cell 
-                      key={`cell-${index}`}
-                      className="hover:opacity-80 transition-opacity duration-300"
-                    />
-                  ))}
+                  <LabelList 
+                    dataKey="count" 
+                    position="top" 
+                    style={{ fontSize: '11px', fill: chartTheme === 'dark' ? '#ccc' : '#666' }} 
+                    className="transition-opacity"
+                  />
+                  {easeFactorData.map((entry, index) => {
+                    // Calculate color based on ease factor - easier cards are blue, harder are purple
+                    const difficultyIndex = easeFactorData.findIndex(item => item.range === entry.range);
+                    const totalRanges = easeFactorData.length;
+                    const difficultyRatio = difficultyIndex / (totalRanges - 1);
+                    
+                    // Generate a color between blue and purple based on difficulty
+                    const color = difficultyRatio < 0.5 
+                      ? `rgba(99, 102, 241, ${0.7 + difficultyRatio * 0.6})` // Blue shade
+                      : `rgba(139, 92, 246, ${0.7 + (difficultyRatio - 0.5) * 0.6})`; // Purple shade
+                    
+                    return (
+                      <Cell 
+                        key={`cell-${index}`}
+                        fill={color}
+                        className="transition-all duration-300 hover:filter hover:brightness-110 hover:translate-y-[-2px]"
+                      />
+                    );
+                  })}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
@@ -103,7 +129,7 @@ const CardPerformance = () => {
                   {leechCards.map((card, index) => (
                     <tr 
                       key={card.id} 
-                      className="border-b border-gray-100 animate-fade-in hover:bg-muted/30 transition-colors" 
+                      className="border-b border-gray-100 animate-fade-in hover:bg-muted/30 transition-colors cursor-pointer" 
                       style={{ animationDelay: `${500 + index * 150}ms` }}
                     >
                       <td className="px-2 py-3 text-left font-medium truncate max-w-[150px]">
@@ -113,7 +139,7 @@ const CardPerformance = () => {
                         {card.back}
                       </td>
                       <td className="px-2 py-3 text-right">
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 text-xs font-medium animate-pulse" style={{ animationDelay: `${index * 200}ms` }}>
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 text-xs font-medium hover:scale-110 hover:bg-red-200 transition-all" style={{ animationDelay: `${index * 200}ms` }}>
                           {card.lapses}
                         </span>
                       </td>
@@ -129,9 +155,9 @@ const CardPerformance = () => {
                 These cards have been forgotten frequently. Consider:
               </p>
               <ul className="text-sm text-muted-foreground list-disc pl-5 mt-2 space-y-1">
-                <li className="animate-fade-in" style={{ animationDelay: '1100ms' }}>Rewriting the card for clarity</li>
-                <li className="animate-fade-in" style={{ animationDelay: '1200ms' }}>Breaking complex cards into simpler ones</li>
-                <li className="animate-fade-in" style={{ animationDelay: '1300ms' }}>Adding more context or mnemonics</li>
+                <li className="animate-fade-in hover:text-foreground transition-colors" style={{ animationDelay: '1100ms' }}>Rewriting the card for clarity</li>
+                <li className="animate-fade-in hover:text-foreground transition-colors" style={{ animationDelay: '1200ms' }}>Breaking complex cards into simpler ones</li>
+                <li className="animate-fade-in hover:text-foreground transition-colors" style={{ animationDelay: '1300ms' }}>Adding more context or mnemonics</li>
               </ul>
             </div>
           </ChartAnimation>

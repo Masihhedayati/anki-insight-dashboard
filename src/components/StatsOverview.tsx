@@ -49,7 +49,7 @@ const StatsOverview = () => {
                       fill={entry.color}
                       strokeWidth={4}
                       stroke={chartTheme === "dark" ? "rgba(0,0,0,0.2)" : "rgba(255,255,255,0.6)"}
-                      className="transition-all duration-200 hover:opacity-90"
+                      className="transition-all duration-200 hover:opacity-80 hover:stroke-width-6"
                     />
                   ))}
                 </Pie>
@@ -57,16 +57,15 @@ const StatsOverview = () => {
                   content={<CustomTooltip 
                     theme={chartTheme}
                     labelFormatter={() => 'Card Distribution'} 
-                    valueFormatter={(value, name) => `${value} cards (${((value / totalCards) * 100).toFixed(1)}%)`}
+                    valueFormatter={(value, name) => `${value} cards (${((Number(value) / totalCards) * 100).toFixed(1)}%)`}
                   />} 
-                  animationDuration={200}
                   cursor={false}
                 />
                 <Legend 
                   layout="horizontal" 
                   verticalAlign="bottom" 
                   align="center"
-                  formatter={(value, entry) => <span className="text-sm font-medium">{value}</span>}
+                  formatter={(value) => <span className="text-sm font-medium hover:text-primary transition-colors">{value}</span>}
                   wrapperStyle={{ opacity: 0.9 }}
                 />
               </PieChart>
@@ -102,7 +101,7 @@ const StatsOverview = () => {
                   </div>
                   <Progress 
                     value={(item.value / totalCards) * 100} 
-                    className="h-2 transition-all duration-500"
+                    className="h-2 transition-all duration-500 hover:h-3"
                     style={{ 
                       backgroundColor: chartTheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
                       '--progress-background': item.color

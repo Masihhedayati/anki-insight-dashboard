@@ -94,7 +94,6 @@ const FutureWorkload = () => {
                     fill: chartTheme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
                     radius: [4, 4, 0, 0]
                   }}
-                  animationDuration={200}
                 />
                 <ReferenceLine y={averageDue} stroke={chartTheme === 'dark' ? "#888" : "#666"} strokeDasharray="3 3" />
                 <Bar 
