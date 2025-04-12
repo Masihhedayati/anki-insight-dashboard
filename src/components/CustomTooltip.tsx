@@ -4,7 +4,7 @@ import React from 'react';
 interface CustomTooltipProps {
   active?: boolean;
   payload?: any[];
-  label?: string;
+  label?: string | number;
   theme?: 'light' | 'dark';
   labelFormatter?: (label: any) => React.ReactNode;
   valueFormatter?: (value: any, name: string) => React.ReactNode;

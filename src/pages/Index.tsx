@@ -8,6 +8,7 @@ import FutureWorkload from "@/components/FutureWorkload";
 import StudyPatterns from "@/components/StudyPatterns";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import ChartSettings from "@/components/ChartSettings";
+import ActivityHeatmap from "@/components/ActivityHeatmap";
 import { ChartProvider } from "@/context/ChartContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -32,6 +33,8 @@ const Index = () => {
           <StatsOverview />
           
           <CardPerformance />
+          
+          <ActivityHeatmap colorScheme="purple" />
           
           <RetentionMetrics />
           

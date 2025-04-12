@@ -10,7 +10,8 @@ import {
   Tooltip, 
   ResponsiveContainer,
   Cell,
-  ReferenceLine
+  ReferenceLine,
+  TooltipProps
 } from "recharts";
 import { Compass } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
