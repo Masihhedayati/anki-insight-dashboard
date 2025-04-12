@@ -55,14 +55,14 @@ const StudyPatterns = () => {
           </div>
           <div>
             <div className="flex items-center">
-              <Clock className="h-4 w-4 mr-1 text-primary animate-float" />
+              <Clock className="h-4 w-4 mr-1 text-primary" />
               <span className="text-sm font-medium">Peak time: {format12Hour(peakHour.hour)}</span>
             </div>
           </div>
         </div>
 
         <div className="h-[250px]">
-          <ChartAnimation delay={700} type="fadeIn">
+          <ChartAnimation delay={400} type="fadeIn">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={studyTimeData}
@@ -96,7 +96,7 @@ const StudyPatterns = () => {
                   dataKey="minutes" 
                   radius={[4, 4, 0, 0]}
                   isAnimationActive={animationsEnabled}
-                  animationDuration={1500}
+                  animationDuration={1000}
                   animationBegin={200}
                   animationEasing="ease-out"
                 >
@@ -113,15 +113,10 @@ const StudyPatterns = () => {
                       color = '#64748b'; // slate
                     }
                     
-                    // Animation delay based on index
-                    const animationDelay = `${index * 50}ms`;
-                    
                     return (
                       <Cell 
                         key={`cell-${index}`} 
                         fill={color} 
-                        className="hover:opacity-80 transition-opacity duration-300 animate-glow-pulse"
-                        style={{ animationDelay, animationDuration: '3s' }}
                       />
                     );
                   })}
@@ -132,20 +127,20 @@ const StudyPatterns = () => {
         </div>
 
         <div className="mt-4 text-sm grid grid-cols-2 gap-2">
-          <div className="flex items-center animate-fade-in" style={{ animationDelay: '900ms' }}>
-            <div className="w-3 h-3 rounded-full bg-[#0ea5e9] mr-2 animate-pulse"></div>
+          <div className="flex items-center">
+            <div className="w-3 h-3 rounded-full bg-[#0ea5e9] mr-2"></div>
             <span className="text-muted-foreground">Morning (5AM-12PM)</span>
           </div>
-          <div className="flex items-center animate-fade-in" style={{ animationDelay: '1000ms' }}>
-            <div className="w-3 h-3 rounded-full bg-[#8b5cf6] mr-2 animate-pulse"></div>
+          <div className="flex items-center">
+            <div className="w-3 h-3 rounded-full bg-[#8b5cf6] mr-2"></div>
             <span className="text-muted-foreground">Afternoon (12PM-5PM)</span>
           </div>
-          <div className="flex items-center animate-fade-in" style={{ animationDelay: '1100ms' }}>
-            <div className="w-3 h-3 rounded-full bg-[#6366f1] mr-2 animate-pulse"></div>
+          <div className="flex items-center">
+            <div className="w-3 h-3 rounded-full bg-[#6366f1] mr-2"></div>
             <span className="text-muted-foreground">Evening (5PM-10PM)</span>
           </div>
-          <div className="flex items-center animate-fade-in" style={{ animationDelay: '1200ms' }}>
-            <div className="w-3 h-3 rounded-full bg-[#64748b] mr-2 animate-pulse"></div>
+          <div className="flex items-center">
+            <div className="w-3 h-3 rounded-full bg-[#64748b] mr-2"></div>
             <span className="text-muted-foreground">Night (10PM-5AM)</span>
           </div>
         </div>

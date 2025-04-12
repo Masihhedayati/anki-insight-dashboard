@@ -10,7 +10,6 @@ import {
   Tooltip, 
   ResponsiveContainer,
   ReferenceLine,
-  Dot
 } from "recharts";
 import { Info } from "lucide-react";
 import { Tooltip as UITooltip } from "@/components/ui/tooltip";
@@ -38,23 +37,6 @@ const RetentionMetrics = () => {
     { day: 60, retention: 24 },
   ];
 
-  // Custom dot for the line charts with animation
-  const renderAnimatedDot = (props: any) => {
-    const { cx, cy, stroke, payload, index } = props;
-
-    return (
-      <Dot
-        cx={cx}
-        cy={cy}
-        r={index === 0 ? 5 : 3}
-        stroke={stroke}
-        fill={stroke}
-        className={`animate-pulse ${index === 0 ? 'animate-glow-pulse' : ''}`}
-        style={{ animationDelay: `${index * 100}ms`, animationDuration: '3s' }}
-      />
-    );
-  };
-
   return (
     <Card className="col-span-full relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 pointer-events-none" />
@@ -66,7 +48,7 @@ const RetentionMetrics = () => {
               Tracking memory retention over time
             </CardDescription>
           </div>
-          <div className="rounded-md bg-primary/10 px-3 py-1 text-sm animate-pulse">
+          <div className="rounded-md bg-primary/10 px-3 py-1 text-sm">
             <span className="font-medium">{averageRetention}%</span> Average Retention
           </div>
         </div>
@@ -80,7 +62,7 @@ const RetentionMetrics = () => {
                 <UITooltip>
                   <TooltipTrigger asChild>
                     <div>
-                      <Info className="h-4 w-4 text-muted-foreground animate-float" />
+                      <Info className="h-4 w-4 text-muted-foreground" />
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -121,8 +103,8 @@ const RetentionMetrics = () => {
                     dataKey="retention" 
                     stroke="#10b981" 
                     strokeWidth={2}
-                    dot={renderAnimatedDot}
-                    activeDot={{ r: 8, className: "animate-glow-pulse" }}
+                    dot={{ r: 3 }}
+                    activeDot={{ r: 6 }}
                     isAnimationActive={animationsEnabled}
                     animationDuration={1500}
                     animationEasing="ease-out"
@@ -140,7 +122,7 @@ const RetentionMetrics = () => {
                 <UITooltip>
                   <TooltipTrigger asChild>
                     <div>
-                      <Info className="h-4 w-4 text-muted-foreground animate-float" style={{ animationDelay: '200ms' }} />
+                      <Info className="h-4 w-4 text-muted-foreground" />
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -152,7 +134,7 @@ const RetentionMetrics = () => {
                 </UITooltip>
               </TooltipProvider>
             </div>
-            <ChartAnimation delay={600} type="dataReveal" dataDirection="bottom-to-top">
+            <ChartAnimation delay={300} type="dataReveal" dataDirection="bottom-to-top">
               <ResponsiveContainer width="100%" height="90%">
                 <LineChart
                   data={forgettingCurveData}
@@ -190,8 +172,8 @@ const RetentionMetrics = () => {
                     dataKey="retention" 
                     stroke="#ef4444" 
                     strokeWidth={2}
-                    dot={renderAnimatedDot}
-                    activeDot={{ r: 8, className: "animate-pulse" }}
+                    dot={{ r: 3 }}
+                    activeDot={{ r: 6 }}
                     isAnimationActive={animationsEnabled}
                     animationDuration={1500}
                     animationEasing="ease-out"

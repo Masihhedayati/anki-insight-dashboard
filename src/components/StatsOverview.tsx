@@ -83,7 +83,7 @@ const StatsOverview = () => {
           <ChartAnimation delay={400} type="fadeIn">
             <div className="space-y-4">
               {cardStatesData.map((item, index) => (
-                <div key={index} className="space-y-2" style={{ animationDelay: `${index * 100}ms` }}>
+                <div key={index} className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div 
@@ -114,8 +114,7 @@ const StatsOverview = () => {
                 {responseTimeData.map((item, index) => (
                   <div 
                     key={index} 
-                    className="flex items-center justify-between" 
-                    style={{ animationDelay: `${(index + cardStatesData.length) * 100}ms` }}
+                    className="flex items-center justify-between"
                   >
                     <span className="text-sm">{item.category}</span>
                     <span className="text-sm font-medium">{item.time.toFixed(1)}s</span>

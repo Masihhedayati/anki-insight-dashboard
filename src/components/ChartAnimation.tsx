@@ -37,9 +37,8 @@ const ChartAnimation = ({
     return <>{children}</>;
   }
 
-  // Get data-specific animation classes
+  // Get animation class
   const getAnimationClass = () => {
-    // Base animation type
     let baseAnimation = '';
     switch(type) {
       case 'scaleIn':
@@ -49,7 +48,6 @@ const ChartAnimation = ({
         baseAnimation = 'animate-shimmer before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent';
         break;
       case 'dataReveal':
-        // Animation that reveals data progressively
         baseAnimation = dataDirection === 'left-to-right' 
           ? 'origin-left' 
           : dataDirection === 'bottom-to-top'
@@ -58,7 +56,6 @@ const ChartAnimation = ({
         baseAnimation += ' animate-data-reveal';
         break;
       case 'valuePulse':
-        // Pulsing animation for important values
         baseAnimation = 'animate-value-pulse';
         break;
       case 'fadeIn':
@@ -67,7 +64,7 @@ const ChartAnimation = ({
         break;
     }
 
-    // Add importance-based animation speed and intensity
+    // Add importance-based animation speed
     const importanceClass = importance === 'high' 
       ? 'animation-duration-500' 
       : importance === 'low'
@@ -81,23 +78,30 @@ const ChartAnimation = ({
   const getDataMaskStyle = () => {
     if (type !== 'dataReveal') return {};
     
+    const styles: React.CSSProperties = {
+      animationDelay: `${delay}ms`,
+    };
+    
     if (dataDirection === 'left-to-right') {
       return { 
+        ...styles,
         maskImage: 'linear-gradient(to right, black 0%, black var(--reveal-progress, 100%), transparent var(--reveal-progress, 100%))',
         WebkitMaskImage: 'linear-gradient(to right, black 0%, black var(--reveal-progress, 100%), transparent var(--reveal-progress, 100%))'
-      };
+      } as React.CSSProperties;
     } else if (dataDirection === 'bottom-to-top') {
       return { 
+        ...styles,
         maskImage: 'linear-gradient(to top, black 0%, black var(--reveal-progress, 100%), transparent var(--reveal-progress, 100%))',
         WebkitMaskImage: 'linear-gradient(to top, black 0%, black var(--reveal-progress, 100%), transparent var(--reveal-progress, 100%))'
-      };
+      } as React.CSSProperties;
     } else if (dataDirection === 'center-out') {
       return {
+        ...styles,
         maskImage: 'radial-gradient(circle, black 0%, black var(--reveal-progress, 100%), transparent var(--reveal-progress, 100%))',
         WebkitMaskImage: 'radial-gradient(circle, black 0%, black var(--reveal-progress, 100%), transparent var(--reveal-progress, 100%))'
-      };
+      } as React.CSSProperties;
     }
-    return {};
+    return styles;
   };
 
   return (
@@ -105,9 +109,8 @@ const ChartAnimation = ({
       className={`relative w-full h-full opacity-0 ${isVisible ? `opacity-100 ${getAnimationClass()}` : ''}`} 
       style={{ 
         animationDelay: `${delay}ms`,
-        '--reveal-progress': '100%',
         ...getDataMaskStyle()
-      } as React.CSSProperties}
+      }}
     >
       {children}
     </div>
